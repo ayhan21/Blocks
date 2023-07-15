@@ -63,12 +63,9 @@ namespace Blocks
         {
             int iter = 0;
             int fit = 0;
-            int start_i = 0;
-            int start_j = 0;
             int cap = size_A * size_B;
-
-            start_i = blockArray.GetLength(0) - 1;
-            start_j = blockArray.GetLength(1) - 1;
+            int start_i = blockArray.GetLength(0) - 1;
+            int start_j = blockArray.GetLength(1) - 1;
 
             foreach (Block block in blockList)
             {
