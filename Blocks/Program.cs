@@ -74,7 +74,7 @@ namespace Blocks
             if (IsListEmpty(blockList))
             {
                 Console.WriteLine("Could not generate blocks with the given input!");
-                restart();
+                restart(false);
             } else
             {
                 PrintList(blockList);
@@ -137,6 +137,15 @@ namespace Blocks
             Print2DArray(blockArray);
             //Console.WriteLine("\nIterations: " + iter.ToString());
             //Console.WriteLine("\nBlocks: " + fit.ToString());
+            RestartPrompt();
+        }
+        public static void RestartPrompt()
+        {
+            Console.Write("\nType 0 to restart: ");
+            if (Console.ReadLine() == "0")
+            {
+                restart(true);
+            }
         }
 
         public static bool IsListEmpty(List<Block> list)
@@ -144,9 +153,12 @@ namespace Blocks
             return list.FindIndex(x => x != null) == -1;
         }
 
-        public static void restart()
+        public static void restart(bool ClearConsole)
         {
-            //Console.Clear();
+            if (ClearConsole)
+            {
+                Console.Clear();
+            }
             input();
         }
 
