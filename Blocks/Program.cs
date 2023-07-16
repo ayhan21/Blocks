@@ -139,25 +139,6 @@ namespace Blocks
             //Console.WriteLine("\nBlocks: " + fit.ToString());
         }
 
-        public static void RollBack(Block[,] blockArray, Block block)
-        {
-            for (int i = 0; i < blockArray.GetLength(0); i++)
-            {
-                for (int j = 0; j < blockArray.GetLength(1); j++)
-                {
-                    if (blockArray[i, j].GetName() == block.GetName())
-                    {
-                        blockArray[i, j] = null;
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
-            }
-            
-        }
-
         public static bool IsListEmpty(List<Block> list)
         {
             return list.FindIndex(x => x != null) == -1;
