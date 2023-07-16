@@ -10,7 +10,7 @@ namespace Blocks
         static List<Block> blockList;
         static char[] blockNames = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
         //static char[] blockNames = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K' };
-        static int size_A, size_B;
+        static int size_A, size_B, max;
         static double multiple;
 
         public static void Main(string[] args)
@@ -28,35 +28,58 @@ namespace Blocks
                 size_B = int.Parse(Console.ReadLine());
                 Console.Write("Enter multiple: ");
                 multiple = double.Parse(Console.ReadLine());
+                Console.Write("Enter max block size: ");
+                max = int.Parse(Console.ReadLine());
+                initArrays(size_A, size_B, max);
             }
             catch (Exception e)
             {
                 Console.WriteLine("Enter a valid number!");
                 input();
             }
-
-            initArrays(size_A, size_B);
         }
 
-        public static void initArrays(int size_A, int size_B)
+        public static void initArrays(int size_A, int size_B, int max)
         {
             Random rnd = new Random();
             blockList = new List<Block>();
 
             foreach(char c in blockNames)
             {
-                int val = rnd.Next(1, 10);
-                if(val % multiple == 0)
+                bool ItemSet = false;
+                int tries = 0;
+                while (!ItemSet)
                 {
-                    blockList.Add(new Block(val, c));
+                    int val = rnd.Next(1, max);
+                    if (val % multiple == 0)
+                    {
+                        blockList.Add(new Block(val, c));
+                        ItemSet = true;
+                    } else
+                    {
+                        tries++;
+                    }
+
+                    if (tries == 5)
+                    {
+                        break;
+                    }
                 }
             }
 
 
             blockArray = new Block[size_A, size_B];
 
-            PrintList(blockList);
-            fitBlocks();
+
+            if (IsListEmpty(blockList))
+            {
+                Console.WriteLine("Could not generate blocks with the given input!");
+                restart();
+            } else
+            {
+                PrintList(blockList);
+                fitBlocks();
+            }
         }
 
         public static void fitBlocks()
@@ -112,8 +135,8 @@ namespace Blocks
             }
 
             Print2DArray(blockArray);
-            Console.WriteLine("\nIterations: " + iter.ToString());
-            Console.WriteLine("\nBlocks: " + fit.ToString());
+            //Console.WriteLine("\nIterations: " + iter.ToString());
+            //Console.WriteLine("\nBlocks: " + fit.ToString());
         }
 
         public static void RollBack(Block[,] blockArray, Block block)
@@ -135,16 +158,19 @@ namespace Blocks
             
         }
 
-                public static void restart()
+        public static bool IsListEmpty(List<Block> list)
         {
-            Console.Clear();
+            return list.FindIndex(x => x != null) == -1;
+        }
+
+        public static void restart()
+        {
+            //Console.Clear();
             input();
         }
 
         public static void Print2DArray<T>(T[,] matrix)
         {
-            Console.WriteLine();
-
             for (int i = 0; i < matrix.GetLength(0); i++)
             {
                 for (int j = 0; j < matrix.GetLength(1); j++)
