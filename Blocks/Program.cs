@@ -23,12 +23,15 @@ namespace Blocks
             try
             {
                 Console.Write("Enter size for A: ");
+                // size of 2d array
                 size_A = int.Parse(Console.ReadLine());
                 Console.Write("Enter size for B: ");
                 size_B = int.Parse(Console.ReadLine());
                 Console.Write("Enter multiple: ");
+                // kratno
                 multiple = double.Parse(Console.ReadLine());
                 Console.Write("Enter max block size: ");
+                // max size for block
                 max = int.Parse(Console.ReadLine());
                 initArrays(size_A, size_B, max);
             }
@@ -44,10 +47,12 @@ namespace Blocks
             Random rnd = new Random();
             blockList = new List<Block>();
 
+            // generate size for each block
             foreach(char c in blockNames)
             {
                 bool ItemSet = false;
                 int tries = 0;
+                // until a valid value is generated
                 while (!ItemSet)
                 {
                     int val = rnd.Next(1, max);
@@ -60,6 +65,7 @@ namespace Blocks
                         tries++;
                     }
 
+                    // skip element after 5 invalid values
                     if (tries == 5)
                     {
                         break;
@@ -86,21 +92,29 @@ namespace Blocks
         {
             int iter = 0;
             int fit = 0;
+            // calculate total capacity of 2d array
             int cap = size_A * size_B;
+
+            // start indexes - last element of array
             int start_i = blockArray.GetLength(0) - 1;
             int start_j = blockArray.GetLength(1) - 1;
 
+            // iterate blocks
             foreach (Block block in blockList)
             {
                 iter += 1;
+                // calculate how many array elements the block will need
                 double spots = block.GetSize() / multiple;
+                // continue if capacity is bigger than block size
                 if (cap >= spots)
                 {
                     fit += 1;
+                    // iterate 2d array row
                     for (int i = start_i; i >= 0; i--)
                     {
                         iter += 1;
 
+                        // iterate 2d array column
                         if (spots != 0)
                         {
                             for (int j = start_j; j >= 0; j--)
@@ -109,15 +123,18 @@ namespace Blocks
 
                                 if (spots != 0)
                                 {
+                                    // if the current element is null, block can be added
                                     if (blockArray[i, j] == null)
                                     {
                                         blockArray[i, j] = block;
+                                        // if added, spot -1 and total capacity -1
                                         spots -= 1;
                                         cap -= 1;
                                     }
                                 }
                                 else
                                 {
+                                    // remember the indexes of array when the block adding is finished; avoid iterating full array every time
                                     start_i = i;
                                     start_j = j;
                                     break;
@@ -126,6 +143,7 @@ namespace Blocks
                         }
                         else
                         {
+                            // reset column index when block isn't finished adding, but the row is full
                             start_j = blockArray.GetLength(1) - 1;
                             break;
                         }
@@ -191,16 +209,17 @@ namespace Blocks
         }
     }
 
+    // object for block
     class Block
     {
+        int Size { get; set; }
+        char Name { get; set; }
+
         public Block(int size, char name)
         {
             Size = size;
             Name = name;
         }
-
-        int Size { get; set; }
-        char Name { get; set; }
 
         public override string ToString()
         {
